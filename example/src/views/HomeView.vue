@@ -39,9 +39,11 @@ import idb from "../idb"
 
 const setPlanData = inject("setPlanData")
 
-const planInput = ref<string>("")
-const queryInput = ref<string>("")
-const queryName = ref<string>("")
+//take planInput from queryParams
+const queryParams = new URLSearchParams(window.location.search)
+const queryInput = ref<string>(queryParams.get("query") || "")
+const planInput = ref<string>(queryParams.get("plan") || "")
+const queryName = ref<string>(queryParams.get("name") || "")
 const draggingPlan = ref<boolean>(false)
 const draggingQuery = ref<boolean>(false)
 const savedPlans = ref<Plan[]>()
@@ -98,6 +100,10 @@ onMounted(() => {
   const noHashURL = window.location.href.replace(/#.*$/, "")
   window.history.replaceState("", document.title, noHashURL)
   loadPlans()
+
+  if (queryInput.value && planInput.value) {
+    submitPlan()
+  }
 })
 
 async function loadPlans() {
