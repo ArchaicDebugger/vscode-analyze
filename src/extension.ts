@@ -4,6 +4,8 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { SidebarProvider } from './sidebarProvider';
 import { Client } from 'pg';
+import axios from 'axios';
+import { stringify } from 'querystring';
 
 export function activate(context: vscode.ExtensionContext) {
 	console.log('Congratulations, your extension "vscode-explain" is now active!');
@@ -70,10 +72,27 @@ export function activate(context: vscode.ExtensionContext) {
 
 		const firstRow = result.rows[0];
 		const plan = JSON.stringify(firstRow['QUERY PLAN']);
-		vscode.env.openExternal(vscode.Uri.parse(`https://archaicdebugger.github.io/pev2/?query=${text}&plan=${plan}`));
+		//vscode.env.openExternal(vscode.Uri.parse(`https://archaicdebugger.github.io/pev2/?query=${text}&plan=${plan}`));
+
+		let data = stringify({
+			'title': 'Generated with VSCode Explain',
+			'plan': plan,
+			'query': text
+		});
+
+		let config = {
+			method: 'post',
+			url: 'https://explain.dalibo.com/new.json',
+			data : data
+		};
+
+		const response: any = await axios.request(config);
+		console.log(response.data.id);
+
+		vscode.env.openExternal(vscode.Uri.parse(`https://explain.dalibo.com/plan/${response.data.id}`));
 
 		//open the sidebar registered above
-		sidebarProvider._view?.show();
+		//sidebarProvider._view?.show();
 	});
 
 	context.subscriptions.push(explainCommand);
