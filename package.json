@@ -12,15 +12,6 @@
   "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {
-    "viewsContainers": {
-      "activitybar": [
-        {
-          "id": "explain-view-container",
-          "title": "My Extension",
-          "icon": "src/media/exticon.svg"
-        }
-      ]
-    },
     "commands": [
       {
         "command": "vscode-explain.explain",
@@ -49,7 +40,15 @@
           "group": "navigation"
         }
       ]
-    }
+    },
+    "keybindings": [
+      {
+        "command": "vscode-explain.explain",
+        "key": "ctrl+shift+e",
+        "mac": "cmd+shift+e",
+        "when": "editorTextFocus && editorHasSelection"
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "yarn run package",
