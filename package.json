@@ -12,12 +12,35 @@
   "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {
+    "viewsContainers": {
+			"activitybar": [
+				{
+					"id": "explain-view-container",
+					"title": "My Extension",
+          "icon": "src/media/exticon.svg"
+				}
+			]
+		},
     "commands": [
       {
         "command": "vscode-explain.explain",
         "title": "Explain"
+      },
+      {
+        "command": "vscode-explain.connect",
+        "title": "Connect"
       }
     ],
+    "views": {
+			"explain-view-container": [
+				{
+					"type": "webview",
+					"id": "explain-view",
+					"name": "MyExtension",
+					"contextualTitle": "MyExtension"
+				}
+			]
+		},
     "menus": {
       "editor/context": [
         {
